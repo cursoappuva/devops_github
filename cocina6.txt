@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 estoy en local 
+=======
+
+>>>>>>> 6e03952fd475b9231fddc3b91d2a9e4f1bdf867a
