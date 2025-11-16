@@ -1,0 +1,50 @@
+# -------------------------------------------------------
+# NOMBRE DEL WORKFLOW
+# -------------------------------------------------------
+name: CI básico
+
+# -------------------------------------------------------
+# CUÁNDO SE EJECUTA ESTE WORKFLOW
+# on: define los eventos que lo disparan
+# -------------------------------------------------------
+on:
+  push:          # Se ejecuta cada vez que haces PUSH a cualquier rama
+  pull_request:  # Se ejecuta cuando se crea o actualiza una Pull Request
+
+# -------------------------------------------------------
+# DEFINICIÓN DE LOS JOBS (tareas a ejecutar)
+# Este workflow solo tiene UN job muy simple
+# -------------------------------------------------------
+jobs:
+  check-repo:
+    # ---------------------------------------------------
+    # Tipo de máquina donde se ejecuta el job
+    # ubuntu-latest = Linux limpio que prepara GitHub
+    # ---------------------------------------------------
+    runs-on: ubuntu-latest
+
+    # ---------------------------------------------------
+    # PASOS DEL JOB (se ejecutan uno detrás de otro)
+    # ---------------------------------------------------
+    steps:
+
+      # 1) Descargar el repositorio en la máquina del workflow
+      #    Sin esto, los siguientes pasos NO ven tus archivos
+      - name: Descargar el repositorio
+        uses: actions/checkout@v4
+
+      # 2) Mostrar los archivos del repo (para ver algo en el log)
+      - name: Mostrar archivos del proyecto
+        run: |
+          echo " Listando archivos del repositorio:"
+          ls -R
+
+      # 3) Comprobar que existe README.md (validación simple)
+      #    Si no existe → el workflow falla con exit 1
+      - name: Validar archivo README.md
+        run: |
+          if [ ! -f "README.md" ]; then
+            echo "README.md NO existe — fallo del workflow"
+            exit 1
+          fi
+          echo "README.md encontrado correctamente"
